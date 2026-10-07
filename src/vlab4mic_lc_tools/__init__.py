@@ -37,15 +37,15 @@ from ._labelling import check_labelling
 @tool("Simulate imaging of a virtual sample")
 def simulate_sample(
     structure: Annotated[
-        Literal["1XI5", "7R5K", "1HZH", "2RCJ", "3J3Y", "8GMO"],
+        Literal["1XI5", "7R5K", "3J3Y", "8GMO"],
         Group("Sample"),
         Description(
-            "Structure to image (PDB ID): 1XI5 clathrin coat, 7R5K nuclear pore complex, 1HZH IgG antibody, 2RCJ IgM, 3J3Y HIV capsid, 8GMO bacteriophage T4 capsid. The first run with a structure downloads it."
+            "Structure to image (PDB ID): 1XI5 clathrin coat, 7R5K nuclear pore complex (constricted), 3J3Y HIV-1 capsid, 8GMO bacteriophage T4 capsid. The first run with a structure downloads it."
         ),
     ] = "1XI5",
     number_of_particles: Annotated[
-        int, Min(1), Max(200), Group("Sample"), Description("Copies of the structure placed at random in the field (fewer are placed when they would overlap)")
-    ] = 3,
+        int, Min(1), Max(20), Group("Sample"), Description("Copies of the structure placed in the field (fewer are placed when they would not fit)")
+    ] = 1,
     probe: Annotated[
         Literal[
             "NHS_ester",
@@ -63,41 +63,104 @@ def simulate_sample(
         ],
         Group("Labelling"),
         Description(
-            "NHS_ester labels lysines of any structure. Antibodies, nanobodies and tags need a 'Target sequence'. The last four are made for one structure (7R5K, 1XI5, 3J3Y)."
+            "NHS_ester labels lysines of any structure; antibodies, nanobodies and tags bind a sequence of the structure (a random one unless you set 'Target sequence'). The last four are made for one structure (7R5K, 1XI5, 3J3Y)."
         ),
     ] = "NHS_ester",
     target_sequence: Annotated[
         Optional[str],
         Group("Labelling"),
-        Description("Amino-acid sequence of the structure that the probe binds, e.g. ELAVGSL (Nup96 C-terminus of 7R5K). Only for antibodies, nanobodies and tags; unset otherwise"),
+        Description("Amino-acid sequence of the structure that an antibody, nanobody or tag binds, e.g. ELAVGSL (Nup96 C-terminus of 7R5K); unset = VLab4Mic picks one"),
     ] = None,
     fluorophore: Annotated[Literal["AF647", "AF488"], Group("Labelling")] = "AF647",
     labelling_efficiency: Annotated[
         float, Min(0), Max(1), Group("Labelling"), Description("Fraction of the binding sites that carry a probe")
     ] = 1.0,
-    modality: Annotated[
-        Literal["STED", "Widefield", "Confocal", "AiryScan", "SMLM", "Reference"],
-        Group("Imaging"),
-        Description("Imaging modality; it sets the resolution and the pixel size (Widefield 100 nm, Confocal 70 nm, AiryScan 40 nm, STED 15 nm, Reference 5 nm, SMLM 2 nm)"),
-    ] = "STED",
-    field_of_view_nm: Annotated[
-        Optional[int],
-        Min(200),
-        Max(20000),
-        Unit("nm"),
-        Group("Sample"),
-        Advanced(),
-        Description("Side of the square field in nm; unset = the standard 1000 nm. The image has field / pixel size pixels per side"),
-    ] = None,
-    exposure_time_s: Annotated[
+    distance_from_epitope_angstrom: Annotated[
         Optional[float],
-        Min(1e-6),
+        Min(0),
         Max(1000),
-        Unit("s"),
-        Label("Exposure time"),
-        Group("Imaging"),
+        Unit("angstrom"),
+        Label("Distance from epitope"),
+        Group("Labelling"),
         Advanced(),
-        Description("Exposure time of the acquisition; unset = the modality's default"),
+        Description("Distance between the epitope and the probe; unset = the probe's own value"),
+    ] = None,
+    wobble_cone_degrees: Annotated[
+        Optional[float],
+        Min(0),
+        Max(45),
+        Unit("deg"),
+        Label("Wobble cone"), Group("Labelling"),
+        Advanced(),
+        Description("Half-angle of the cone in which the probe wobbles; unset = no wobble"),
+    ] = None,
+    degree_of_labelling: Annotated[
+        Optional[int], Min(0), Max(1000), Group("Labelling"), Advanced(), Description("Fluorophores per probe (DOL); unset = the probe's own value")
+    ] = None,
+    structural_integrity: Annotated[
+        Optional[float],
+        Min(0),
+        Max(1),
+        Group("Labelling"),
+        Advanced(),
+        Description("Fraction of the complex that is intact; unset = intact. Uses the two cluster distances below"),
+    ] = None,
+    small_cluster_distance_angstrom: Annotated[
+        float, Min(0), Unit("angstrom"), Label("Small cluster distance"), Group("Labelling"), Advanced(), Description("Distance that groups epitopes into multimers (with 'Structural integrity')")
+    ] = 100.0,
+    large_cluster_distance_angstrom: Annotated[
+        float, Min(0), Unit("angstrom"), Label("Large cluster distance"), Group("Labelling"), Advanced(), Description("Distance within multimers to consider neighbours (with 'Structural integrity')")
+    ] = 200.0,
+    sample_size_xy_nm: Annotated[
+        int, Min(100), Max(20000), Unit("nm"), Label("Sample size XY"), Group("Sample"), Advanced(), Description("Side of the square sample; the image has this size divided by the pixel size, per side")
+    ] = 1000,
+    sample_size_z_nm: Annotated[int, Min(1), Max(20000), Unit("nm"), Label("Sample size Z"), Group("Sample"), Advanced(), Description("Thickness of the sample")] = 100,
+    minimal_distance_nm: Annotated[
+        Optional[int],
+        Min(1),
+        Max(1000),
+        Unit("nm"),
+        Label("Minimal distance between particles"), Group("Sample"),
+        Advanced(),
+        Description("Minimal distance between particles; unset = from the size of the labelled structure"),
+    ] = None,
+    random_positions: Annotated[bool, Group("Sample"), Advanced(), Description("Place the particles at random (always the case with more than one)")] = True,
+    axial_offset_nm: Annotated[Optional[float], Unit("nm"), Label("Axial offset"), Group("Sample"), Advanced(), Description("Height of the particles above the bottom of the sample; unset = standard")] = None,
+    random_orientations: Annotated[bool, Group("Sample"), Advanced(), Description("Give each particle a random orientation")] = True,
+    random_rotations: Annotated[bool, Group("Sample"), Advanced(), Description("Rotate each particle randomly in the plane")] = True,
+    expansion_factor: Annotated[float, Min(0.1), Max(100), Group("Sample"), Advanced(), Description("Expansion of the structure (expansion microscopy); 1 = none")] = 1.0,
+    modality: Annotated[
+        Literal["STED", "Widefield", "Confocal", "AiryScan", "SMLM"],
+        Group("Imaging"),
+        Description("Imaging modality; it sets the resolution and the pixel size (Widefield 100 nm, Confocal 70 nm, AiryScan 40 nm, STED 15 nm, SMLM 2 nm)"),
+    ] = "STED",
+    exposure_time_s: Annotated[
+        float, Min(0), Max(10), Unit("s"), Label("Exposure time"), Group("Imaging"), Description("Exposure time of the acquisition")
+    ] = 0.001,
+    noise: Annotated[bool, Group("Imaging"), Description("Add detector noise to the simulated image")] = True,
+    pixel_size_nm: Annotated[
+        Optional[int], Min(1), Max(1000), Unit("nm"), Label("Pixel size"), Group("Modality"), Advanced(), Description("Pixel size; unset = the modality's. It must be a multiple of the PSF sampling rate")
+    ] = None,
+    psf_sigma_xy_nm: Annotated[
+        Optional[float], Min(0), Max(1000), Unit("nm"), Label("PSF sigma in XY"), Group("Modality"), Advanced(), Description("Unset = the modality's")
+    ] = None,
+    psf_sigma_z_nm: Annotated[
+        Optional[float], Min(0), Max(1000), Unit("nm"), Label("PSF sigma in Z"), Group("Modality"), Advanced(), Description("Unset = the modality's")
+    ] = None,
+    depth_of_field_nm: Annotated[
+        Optional[int], Min(10), Max(1000), Unit("nm"), Label("Depth of field"), Group("Modality"), Advanced(), Description("Unset = the modality's")
+    ] = None,
+    psf_sampling_nm: Annotated[
+        Optional[int], Min(1), Max(1000), Unit("nm"), Label("PSF sampling rate"), Group("Modality"), Advanced(), Description("Unset = the modality's")
+    ] = None,
+    lateral_precision_nm: Annotated[
+        Optional[float], Min(0), Max(1000), Unit("nm"), Label("Lateral precision"), Group("Localisations (SMLM)"), Advanced(), Description("Precision of the localisations in XY; unset = the modality's")
+    ] = None,
+    axial_precision_nm: Annotated[
+        Optional[float], Min(0), Max(1000), Unit("nm"), Label("Axial precision"), Group("Localisations (SMLM)"), Advanced(), Description("Precision of the localisations in Z; unset = the modality's")
+    ] = None,
+    localisations_per_emitter: Annotated[
+        Optional[int], Min(1), Max(1000), Group("Localisations (SMLM)"), Advanced(), Description("Unset = the modality's")
     ] = None,
     random_seed: Annotated[
         Optional[int], Min(0), Group("Imaging"), Advanced(), Description("Seed for reproducible positions, orientations and noise; unset = a different sample every run")
@@ -115,11 +178,22 @@ def simulate_sample(
 
     check_cancel()
     progress(0.08, "building the virtual sample (the first run with a structure downloads it)")
-    options = {}
-    if field_of_view_nm is not None:
-        options["sample_dimensions"] = [int(field_of_view_nm), int(field_of_view_nm), 100]
-    if exposure_time_s is not None:
-        options[modality] = {"exp_time": float(exposure_time_s)}
+    sample = {}
+    for key, value in (
+        ("probe_distance_to_epitope", distance_from_epitope_angstrom),
+        ("probe_wobble_theta", wobble_cone_degrees),
+        ("probe_DoL", degree_of_labelling),
+        ("minimal_distance", minimal_distance_nm),
+        ("axial_offset", axial_offset_nm),
+    ):
+        if value is not None:
+            sample[key] = value
+    if structural_integrity is not None:
+        sample.update(
+            structural_integrity=float(structural_integrity),
+            structural_integrity_small_cluster=float(small_cluster_distance_angstrom),
+            structural_integrity_large_cluster=float(large_cluster_distance_angstrom),
+        )
     try:
         _, _, experiment = experiments.image_vsample(
             structure=structure,
@@ -128,12 +202,17 @@ def simulate_sample(
             probe_target_value=target_sequence or None,
             probe_fluorophore=fluorophore,
             labelling_efficiency=float(labelling_efficiency),
+            sample_dimensions=[int(sample_size_xy_nm), int(sample_size_xy_nm), int(sample_size_z_nm)],
+            random_placing=bool(random_positions),
+            random_orientations=bool(random_orientations),
+            random_rotations=bool(random_rotations),
+            expansion_factor=float(expansion_factor),
             modality=modality,
             number_of_particles=int(number_of_particles),
             random_seed=random_seed,
             clear_experiment=True,
             run_simulation=False,
-            **options,
+            **sample,
         )
     except OSError as error:  # no internet, or the structure database is unreachable (requests' errors derive from OSError)
         raise ToolError(
@@ -142,29 +221,51 @@ def simulate_sample(
             % (structure, type(error).__name__, error),
         ) from error
     check_cancel()
+    overrides = {
+        key: value
+        for key, value in (
+            ("pixelsize_nm", pixel_size_nm),
+            ("lateral_resolution_nm", psf_sigma_xy_nm),
+            ("axial_resolution_nm", psf_sigma_z_nm),
+            ("depth_of_field_nm", depth_of_field_nm),
+            ("psf_voxel_nm", psf_sampling_nm),
+            ("lateral_precision", lateral_precision_nm),
+            ("axial_precision", axial_precision_nm),
+            ("nlocalisations", localisations_per_emitter),
+        )
+        if value is not None
+    }
+    if overrides:  # only what was set: update_modality simulates localisations unless told otherwise
+        experiment.update_modality(modality, simulate_localistations=(modality == "SMLM"), **overrides)
+    experiment.set_modality_acq(modality, exp_time=float(exposure_time_s), noise=bool(noise), nframes=1)
+    detector = experiment.imaging_modalities[modality]["detector"]
+    pixel_nm = float(detector["pixelsize"]) * float(detector["scale"]) * 1e9
+    sampling_nm = float(experiment.imaging_modalities[modality]["psf_params"]["voxelsize"][0])
+    if sampling_nm > 0 and abs(pixel_nm / sampling_nm - round(pixel_nm / sampling_nm)) > 1e-6:
+        raise ToolError(
+            "pixel_size_not_multiple",
+            "The pixel size (%g nm) must be a multiple of the PSF sampling rate (%g nm): change one of them under 'Modality'."
+            % (pixel_nm, sampling_nm),
+        )
     progress(0.5, "simulating the %s image" % modality)
     images, noiseless = experiment.run_simulation()
     progress(0.95, "collecting the image")
     channel = next(iter(images[modality]))
     simulated = np.asarray(images[modality][channel])
     clean = np.asarray(noiseless[modality][channel], dtype=np.float32)
-    frames = int(simulated.shape[0]) if simulated.ndim == 3 else 1
-    if simulated.ndim == 3:  # one frame is acquired; a stack would not fit the declared YX output
+    if simulated.ndim == 3:  # one frame is acquired; keep the declared YX output
         simulated, clean = simulated[0], clean[0]
-    detector = experiment.imaging_modalities[modality]["detector"]
-    pixel_size_nm = float(detector["pixelsize"]) * float(detector["scale"]) * 1e9
     placed = int(experiment.coordinate_field.get_molecule_param("nMolecules"))
     return (
         simulated,
         clean,
         {
             "modality": modality,
-            "pixel_size_nm": round(pixel_size_nm, 3),
-            "pixel_size_um": round(pixel_size_nm / 1000.0, 6),
+            "pixel_size_nm": round(pixel_nm, 3),
+            "pixel_size_um": round(pixel_nm / 1000.0, 6),
             "image_size_px": "%d x %d" % (simulated.shape[1], simulated.shape[0]),
             "particles_requested": int(number_of_particles),
             "particles_placed": placed,
-            "frames_acquired": frames,
         },
     )
 

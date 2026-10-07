@@ -27,9 +27,8 @@
             "tol": 0.01
           },
           "image_size_px": "66 x 66",
-          "particles_requested": 3,
-          "particles_placed": 3,
-          "frames_acquired": 1
+          "particles_requested": 1,
+          "particles_placed": 1
         }
       }
     }
@@ -38,7 +37,7 @@
     "tool": "simulate_sample",
     "inputs": {
       "modality": "Widefield",
-      "field_of_view_nm": 2000,
+      "sample_size_xy_nm": 2000,
       "exposure_time_s": 0.01,
       "random_seed": 1
     },
@@ -64,7 +63,9 @@
             "approx": 100,
             "tol": 0.01
           },
-          "image_size_px": "20 x 20"
+          "image_size_px": "20 x 20",
+          "particles_requested": 1,
+          "particles_placed": 1
         }
       }
     }
@@ -96,7 +97,10 @@
           "pixel_size_nm": {
             "approx": 70,
             "tol": 0.01
-          }
+          },
+          "image_size_px": "14 x 14",
+          "particles_requested": 1,
+          "particles_placed": 1
         }
       }
     }
@@ -128,39 +132,10 @@
           "pixel_size_nm": {
             "approx": 40,
             "tol": 0.01
-          }
-        }
-      }
-    }
-  },
-  {
-    "tool": "simulate_sample",
-    "inputs": {
-      "modality": "Reference",
-      "random_seed": 1
-    },
-    "expect": {
-      "max_seconds": 180,
-      "progress_events_min": 3,
-      "results": {
-        "simulated": {
-          "shape": [
-            200,
-            200
-          ]
-        },
-        "noiseless": {
-          "shape": [
-            200,
-            200
-          ]
-        },
-        "values": {
-          "modality": "Reference",
-          "pixel_size_nm": {
-            "approx": 5,
-            "tol": 0.01
-          }
+          },
+          "image_size_px": "25 x 25",
+          "particles_requested": 1,
+          "particles_placed": 1
         }
       }
     }
@@ -172,7 +147,7 @@
       "random_seed": 1
     },
     "expect": {
-      "max_seconds": 400,
+      "max_seconds": 180,
       "progress_events_min": 3,
       "results": {
         "simulated": {
@@ -192,7 +167,10 @@
           "pixel_size_nm": {
             "approx": 2,
             "tol": 0.01
-          }
+          },
+          "image_size_px": "500 x 500",
+          "particles_requested": 1,
+          "particles_placed": 1
         }
       }
     }
@@ -207,7 +185,7 @@
       "random_seed": 1
     },
     "expect": {
-      "max_seconds": 500,
+      "max_seconds": 180,
       "progress_events_min": 3,
       "results": {
         "simulated": {
@@ -223,11 +201,14 @@
           ]
         },
         "values": {
-          "particles_placed": 2,
+          "modality": "Widefield",
           "pixel_size_nm": {
             "approx": 100,
             "tol": 0.01
-          }
+          },
+          "image_size_px": "10 x 10",
+          "particles_requested": 2,
+          "particles_placed": 2
         }
       }
     }
@@ -243,7 +224,7 @@
       "random_seed": 1
     },
     "expect": {
-      "max_seconds": 500,
+      "max_seconds": 180,
       "progress_events_min": 3,
       "results": {
         "simulated": {
@@ -259,11 +240,14 @@
           ]
         },
         "values": {
-          "particles_placed": 2,
+          "modality": "Widefield",
           "pixel_size_nm": {
             "approx": 100,
             "tol": 0.01
-          }
+          },
+          "image_size_px": "10 x 10",
+          "particles_requested": 2,
+          "particles_placed": 2
         }
       }
     }
@@ -271,12 +255,79 @@
   {
     "tool": "simulate_sample",
     "inputs": {
-      "probe": "Antibody"
+      "probe": "Antibody",
+      "modality": "Widefield",
+      "random_seed": 1
     },
     "expect": {
-      "status": "FAILED",
-      "code": "probe_needs_target",
-      "message_contains": "Target sequence"
+      "max_seconds": 180,
+      "progress_events_min": 3,
+      "results": {
+        "simulated": {
+          "shape": [
+            10,
+            10
+          ]
+        },
+        "noiseless": {
+          "shape": [
+            10,
+            10
+          ]
+        },
+        "values": {
+          "modality": "Widefield",
+          "pixel_size_nm": {
+            "approx": 100,
+            "tol": 0.01
+          },
+          "image_size_px": "10 x 10",
+          "particles_requested": 1,
+          "particles_placed": 1
+        }
+      }
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "modality": "Widefield",
+      "noise": false,
+      "pixel_size_nm": 50,
+      "psf_sampling_nm": 10,
+      "psf_sigma_xy_nm": 120,
+      "structural_integrity": 0.5,
+      "wobble_cone_degrees": 10,
+      "degree_of_labelling": 2,
+      "random_seed": 1
+    },
+    "expect": {
+      "max_seconds": 180,
+      "progress_events_min": 3,
+      "results": {
+        "simulated": {
+          "shape": [
+            20,
+            20
+          ]
+        },
+        "noiseless": {
+          "shape": [
+            20,
+            20
+          ]
+        },
+        "values": {
+          "modality": "Widefield",
+          "pixel_size_nm": {
+            "approx": 50,
+            "tol": 0.01
+          },
+          "image_size_px": "20 x 20",
+          "particles_requested": 1,
+          "particles_placed": 1
+        }
+      }
     }
   },
   {
@@ -299,6 +350,18 @@
       "status": "FAILED",
       "code": "target_not_used",
       "message_contains": "Leave it unset"
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "modality": "Widefield",
+      "pixel_size_nm": 105
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "pixel_size_not_multiple",
+      "message_contains": "multiple of the PSF sampling"
     }
   },
   {

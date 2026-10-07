@@ -47,21 +47,22 @@ The installer also registers two VLab4Mic tools for the [LabConstrictor tools br
 
 | Tool | What it does |
 |---|---|
-| **Simulate imaging of a virtual sample** | Builds a virtual sample of a structure (clathrin, nuclear pore, HIV capsid, ...), labels it with a probe and returns the simulated and the noiseless image, plus the pixel size. |
+| **Simulate imaging of a virtual sample** | Builds a virtual sample of a structure (clathrin, nuclear pore, HIV capsid, T4 capsid), labels it with a probe and images it with one of the five modalities, with the settings of the notebook (advanced ones are folded away). Returns the simulated and the noiseless image, plus the pixel size. |
 | **Compare an image with a reference** | Measures the structural similarity (SSIM) and the Pearson correlation of two images after matching their pixel sizes. |
 
 Example from a terminal (use the Python of the installed app):
 
 ```
 <install folder>/bin/python -m labconstrictor_tools run VLab4Mic simulate_sample modality=STED random_seed=1
-<install folder>/bin/python -m labconstrictor_tools run VLab4Mic simulate_sample structure=7R5K probe=NPC_Nup96_Cterminal_direct modality=Widefield field_of_view_nm=3000
+<install folder>/bin/python -m labconstrictor_tools run VLab4Mic simulate_sample structure=7R5K probe=NPC_Nup96_Cterminal_direct modality=Widefield sample_size_xy_nm=3000
 ```
 
 Good to know:
 - The first run with a structure downloads it, and a run takes from about 10 seconds (small structure, STED) to over a minute (nuclear pore, SMLM). Stopping a run takes effect between its stages.
-- The image covers a square field (1000 nm by default, *Field of view* under advanced settings). A widefield image at 100 nm per pixel has only 10 x 10 pixels in the default field: use a larger field for the coarser modalities.
+- The image covers a square field (1000 nm by default, *Sample size XY* under advanced settings). A widefield image at 100 nm per pixel has only 10 x 10 pixels in the default field: use a larger field for the coarser modalities.
 - The pixel size is reported in the results (Napari and Fiji do not read it from the image): enter it as the pixel size of the layer or window when you compare images.
 - SSIM is high for sparse images even when they do not match (an image full of background looks alike); read it together with the Pearson correlation.
+- Not in the tools (use the notebook): probes made from a protein, residue or primary probe, new fluorophores, image-based placement of particles, lists of orientations, several modalities or probes in one run, and multi-frame acquisitions (a single frame is returned).
 - The notebooks are unchanged.
 
 Developers: `src/vlab4mic_lc_tools` holds the declarations, `lc_tests/` the tests (see `lc_tests/README.md`).
