@@ -41,6 +41,31 @@ Full step-by-step instructions for each operating system are in the [installatio
 
 Installation takes around 6 to 8 minutes and is only needed once. After installing, launch VLab4Mic from your desktop, Start Menu, or Applications folder.
 
+## Use VLab4Mic from Napari and Fiji (experimental)
+
+The installer also registers two VLab4Mic tools for the [LabConstrictor tools bridge](https://github.com/CellMigrationLab/LabConstrictor-Tools), so that [Napari](https://github.com/CellMigrationLab/napari-labconstrictor) and [Fiji](https://github.com/CellMigrationLab/LabConstrictor-Fiji) show them as forms, and so that the command line can run them:
+
+| Tool | What it does |
+|---|---|
+| **Simulate imaging of a virtual sample** | Builds a virtual sample of a structure (clathrin, nuclear pore, HIV capsid, ...), labels it with a probe and returns the simulated and the noiseless image, plus the pixel size. |
+| **Compare an image with a reference** | Measures the structural similarity (SSIM) and the Pearson correlation of two images after matching their pixel sizes. |
+
+Example from a terminal (use the Python of the installed app):
+
+```
+<install folder>/bin/python -m labconstrictor_tools run VLab4Mic simulate_sample modality=STED random_seed=1
+<install folder>/bin/python -m labconstrictor_tools run VLab4Mic simulate_sample structure=7R5K probe=NPC_Nup96_Cterminal_direct modality=Widefield field_of_view_nm=3000
+```
+
+Good to know:
+- The first run with a structure downloads it, and a run takes from about 10 seconds (small structure, STED) to over a minute (nuclear pore, SMLM). Stopping a run takes effect between its stages.
+- The image covers a square field (1000 nm by default, *Field of view* under advanced settings). A widefield image at 100 nm per pixel has only 10 x 10 pixels in the default field: use a larger field for the coarser modalities.
+- The pixel size is reported in the results (Napari and Fiji do not read it from the image): enter it as the pixel size of the layer or window when you compare images.
+- SSIM is high for sparse images even when they do not match (an image full of background looks alike); read it together with the Pearson correlation.
+- The notebooks are unchanged.
+
+Developers: `src/vlab4mic_lc_tools` holds the declarations, `lc_tests/` the tests (see `lc_tests/README.md`).
+
 ## Other ways to use VLab4Mic
 
 Prefer not to install anything, or want full scripting control? The [main VLab4Mic repository](https://github.com/HenriquesLab/VLab4Mic) covers the alternatives:
