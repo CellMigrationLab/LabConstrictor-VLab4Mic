@@ -75,3 +75,7 @@ If you use VLab4Mic in your research, please cite:
 ## License
 
 Released under the [MIT License](LICENSE).
+
+## 🔄 Automatic Template Updates
+
+LabConstrictor can prepare pull requests that keep this repository aligned with improvements in the main template, including updates to GitHub Actions workflows. Complete the one-time [automatic synchronization setup](.tools/docs/template_synchronization.md) to enable these updates.
