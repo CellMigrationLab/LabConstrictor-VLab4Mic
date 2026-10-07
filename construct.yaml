@@ -28,6 +28,9 @@ extra_files:
 - notebooks/notebook_latest_versions.yaml: VLab4Mic/notebook_latest_versions.yaml
 - requirements.txt: VLab4Mic/requirements.txt
 - requirements_gpu.txt: VLab4Mic/requirements_gpu.txt
+- setup.py: VLab4Mic/setup.py
+- src/vlab4mic_lc_tools/__init__.py: VLab4Mic/src/vlab4mic_lc_tools/__init__.py
+- src/vlab4mic_lc_tools/_labelling.py: VLab4Mic/src/vlab4mic_lc_tools/_labelling.py
 post_install: app/bash_bat_scripts/post_install.bat # [win]
 post_install: app/bash_bat_scripts/post_install.sh # [unix]
 pre_uninstall: app/bash_bat_scripts/pre_uninstall.bat # [win]
