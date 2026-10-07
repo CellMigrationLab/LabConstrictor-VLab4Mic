@@ -1,31 +1,29 @@
-{ 
-"$schema": "https://schemas.conda.org/menuinst/menuinst-1-1-3.schema.json", 
-"menu_name": "VLab4Mic", 
-"menu_items": [ { 
-    "name": "VLab4Mic", 
-    "activate": true, 
-    "terminal": true,
-    "platforms": { "win": {
-                        "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.ico", 
-                        "command": [
-                                    "cmd.exe", "/c",
-                                    "echo Starting Jupyter Lab, please wait a moment... && python.exe -m jupyter lab \"BASE_PATH_KEYWORD/VLab4Mic/notebooks/Welcome.ipynb\" --ServerApp.shutdown_no_activity_timeout=30 \"--notebook-dir=~\" --FileContentsManager.always_delete_dir=True && exit && echo Jupyter Lab has exited."
-                                ]
-                    },
-                   "linux": {
-                        "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.png",
-                        "command": [
-                                    "bash", "-lc", 
-                                    "echo \"Starting Jupyter Lab, please wait a moment...\" && \"BASE_PATH_KEYWORD/bin/python\" -m jupyter lab \"BASE_PATH_KEYWORD/VLab4Mic/notebooks/Welcome.ipynb\" --ServerApp.shutdown_no_activity_timeout=30 \"--notebook-dir=~\" --FileContentsManager.always_delete_dir=True && exit"
-                                   ]
-                    }, 
-                   "osx": {
-                        "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.icns",
-                        "command": [
-                                    "bash", "-lc", 
-                                    "echo \"Starting Jupyter Lab, please wait a moment...\" && \"BASE_PATH_KEYWORD/bin/python\" -m jupyter lab \"BASE_PATH_KEYWORD/VLab4Mic/notebooks/Welcome.ipynb\" --ServerApp.shutdown_no_activity_timeout=30 \"--notebook-dir=~\" --FileContentsManager.always_delete_dir=True && exit"
-                                   ]
-                        } 
-                 }
-    } ] 
+{
+  "$schema": "https://schemas.conda.org/menuinst/menuinst-1-1-3.schema.json",
+  "menu_name": "VLab4Mic",
+  "menu_items": [
+    {
+      "name": "VLab4Mic",
+      "description": "Launch VLab4Mic in its packaged JupyterLab environment.",
+      "activate": true,
+      "terminal": true,
+      "working_dir": "{{ HOME }}",
+      "command": [
+        "{{ PYTHON }}",
+        "{{ PREFIX }}/VLab4Mic/launch_jupyter.py",
+        "{{ PREFIX }}/VLab4Mic/notebooks/Welcome.ipynb"
+      ],
+      "platforms": {
+        "win": {
+          "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.ico"
+        },
+        "linux": {
+          "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.png"
+        },
+        "osx": {
+          "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.icns"
+        }
+      }
+    }
+  ]
 }
