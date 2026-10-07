@@ -112,3 +112,9 @@ def test_ranges_match_the_notebook_widgets():
     assert (inputs["sample_size_xy_nm"]["default"], inputs["sample_size_z_nm"]["default"]) == (1000, 100)
     assert inputs["exposure_time_s"]["default"] == 0.001
     assert inputs["random_orientations"]["default"] is True and inputs["random_rotations"]["default"] is True
+
+
+def test_a_new_simulation_replaces_the_previous_images():
+    outputs = {o["name"]: o for o in _tools()["simulate_sample"]["outputs"]}
+    assert outputs["simulated"]["replace"] and outputs["noiseless"]["replace"]
+    assert "replace" not in outputs["values"]
