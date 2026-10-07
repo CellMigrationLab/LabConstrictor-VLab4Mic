@@ -23,6 +23,7 @@ from labconstrictor_tools import (
     Min,
     Name,
     PixelSizeOf,
+    Replace,
     Scalars,
     ToolError,
     Unit,
@@ -168,8 +169,8 @@ def simulate_sample(
         Optional[int], Min(0), Group("Imaging"), Advanced(), Description("Seed for reproducible positions, orientations and noise; unset = a different sample every run")
     ] = None,
 ) -> tuple[
-    Annotated[ImageOut, Name("simulated"), Axes("YX")],
-    Annotated[ImageOut, Name("noiseless"), Axes("YX")],
+    Annotated[ImageOut, Name("simulated"), Axes("YX"), Replace()],
+    Annotated[ImageOut, Name("noiseless"), Axes("YX"), Replace()],
     Scalars,
 ]:
     """Build a virtual sample of a molecular structure, label it with a probe and simulate how a microscope images it."""
