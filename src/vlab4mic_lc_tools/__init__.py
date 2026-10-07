@@ -33,6 +33,8 @@ from labconstrictor_tools import (
 
 from ._labelling import check_labelling
 
+MAX_SIMULATION_GB = 2.0  # memory a simulation may need
+
 
 @tool("Simulate imaging of a virtual sample")
 def simulate_sample(
@@ -135,7 +137,7 @@ def simulate_sample(
         Description("Imaging modality; it sets the resolution and the pixel size (Widefield 100 nm, Confocal 70 nm, AiryScan 40 nm, STED 15 nm, SMLM 2 nm)"),
     ] = "STED",
     exposure_time_s: Annotated[
-        float, Min(0), Max(10), Unit("s"), Label("Exposure time"), Group("Imaging"), Description("Exposure time of the acquisition")
+        float, Min(0), Max(10), Unit("s"), Label("Exposure time"), Group("Imaging"), Description("Exposure time of the acquisition. The memory needed grows with it: about 2.6 GB at 0.1 s for one clathrin particle")
     ] = 0.001,
     noise: Annotated[bool, Group("Imaging"), Description("Add detector noise to the simulated image")] = True,
     pixel_size_nm: Annotated[
@@ -246,6 +248,16 @@ def simulate_sample(
             "pixel_size_not_multiple",
             "The pixel size (%g nm) must be a multiple of the PSF sampling rate (%g nm): change one of them under 'Modality'."
             % (pixel_nm, sampling_nm),
+        )
+    # VLab4Mic draws every photon of every emitter as a coordinate (3 floats): the memory grows with exposure x emitters x particles
+    # (about 1e5 photons per emitter and second; calibrated on 1XI5, 1 particle, 1 s = 26 GB). Refuse what cannot fit.
+    emitters = sum(len(v) for v in experiment.particle.emitters.values()) * int(number_of_particles)
+    needed_gb = emitters * 1e5 * float(exposure_time_s) * 24 / 1e9
+    if needed_gb > MAX_SIMULATION_GB:
+        raise ToolError(
+            "exposure_too_long",
+            "With %d emitters, an exposure of %g s needs about %.0f GB of memory in VLab4Mic. Use at most %.3g s (or fewer particles, or a lower labelling efficiency)."
+            % (emitters, exposure_time_s, needed_gb, exposure_time_s * MAX_SIMULATION_GB / needed_gb),
         )
     progress(0.5, "simulating the %s image" % modality)
     images, noiseless = experiment.run_simulation()

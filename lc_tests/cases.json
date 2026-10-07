@@ -387,6 +387,18 @@
     }
   },
   {
+    "tool": "simulate_sample",
+    "inputs": {
+      "modality": "Widefield",
+      "exposure_time_s": 10
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "exposure_too_long",
+      "message_contains": "needs about"
+    }
+  },
+  {
     "tool": "compare_images",
     "inputs": {
       "reference": "fixtures/reference_20nm.tif",
