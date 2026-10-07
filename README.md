@@ -41,6 +41,51 @@ Full step-by-step instructions for each operating system are in the [installatio
 
 Installation takes around 6 to 8 minutes and is only needed once. After installing, launch VLab4Mic from your desktop, Start Menu, or Applications folder.
 
+## How-to: install and run your first simulation
+
+### 1. Install the app (about 10 minutes, once)
+1. Open the [Releases page](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases) and download the installer for your system from the newest release: the `.exe` for Windows, the `.pkg` for a Mac with an Apple chip (M1 or newer; Intel Macs are not supported), the `.sh` for Linux.
+2. Run it and follow the prompts (choose *Install only for me*). It downloads and sets up Python and VLab4Mic, which takes 6 to 8 minutes; the window may look idle for a while.
+3. Windows: if it warns that the publisher is unknown, click **More info**, then **Run anyway**. macOS: if it refuses to open, go to **System Settings > Privacy & Security**, scroll to *Security* and click **Open Anyway**. Step-by-step pictures: [installation guide](.tools/docs/download_executable.md).
+
+You now have the VLab4Mic notebook app. To use it from Napari or Fiji, continue below; the app must stay installed, because the two programs only show its tools.
+
+### 2. First simulation in Napari
+1. Install the two small Napari add-ons into the Python environment where Napari lives, then restart Napari ([details](https://github.com/CellMigrationLab/napari-labconstrictor#install)):
+   ```
+   pip install https://github.com/CellMigrationLab/LabConstrictor-Tools/archive/refs/heads/main.zip
+   pip install https://github.com/CellMigrationLab/napari-labconstrictor/archive/refs/heads/main.zip
+   ```
+2. In Napari open **Plugins > LabConstrictor tools**. Pick **VLab4Mic**, then **Simulate imaging of a virtual sample**. The form is the same as the notebook's: structure, labelling, imaging. The advanced settings are behind *Show advanced settings*; the form scrolls.
+
+   ![The VLab4Mic form in Napari](docs/img/howto_napari_form.png)
+
+3. Choose a modality (here STED, 8 particles) and press **Run**. The first run downloads the structure and can take a minute; later runs of the same structure take 10 to 60 seconds. The line under the form tells you the result and the pixel size.
+
+   ![A simulated STED image in Napari](docs/img/howto_napari_result.png)
+
+4. You get two layers, `VLab4Mic:simulated` and `VLab4Mic:noiseless`. Every new run **replaces** them. To keep a result, rename its layer: a renamed layer is never replaced.
+
+### 3. First simulation in Fiji
+1. Copy `labconstrictor-fiji-*.jar` into `Fiji.app/plugins/` and restart Fiji ([details](https://github.com/CellMigrationLab/LabConstrictor-Fiji#install)).
+2. Choose **Plugins > LabConstrictor > LabConstrictor Tools...**, pick **VLab4Mic** and **Simulate imaging of a virtual sample**. The dialog has the same settings, grouped as in the notebook.
+
+   ![The VLab4Mic dialog in Fiji](docs/img/howto_fiji_dialog.png)
+
+3. Press **OK**. The simulated image opens in its own window, with the settings summary in a text window (the Log). Running again replaces the window; rename it to keep it.
+
+   ![The result in Fiji](docs/img/howto_fiji_result.png)
+
+### Common problems
+| What you see | What to do |
+|---|---|
+| The installer window looks stuck | Wait: the installation takes 6 to 8 minutes. |
+| Napari or Fiji lists no VLab4Mic | The app is not registered: install it (or reinstall), then press **Rescan apps** in Napari or restart Fiji. |
+| The first run is very slow | It downloads the structure; the next run is faster. Keep **Keep the worker running** ticked in Napari. |
+| The image is only 10 x 10 pixels | Widefield pixels are 100 nm and the default field is 1000 nm: raise *Sample size XY* under advanced settings. |
+| A run fails | Press **Details...** (Napari) or read the Log window (Fiji); the last lines say why. Press **Restart worker** and try again. |
+| Something else | [Open an issue](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/issues) with a screenshot and the text of **Details...**. |
+
 ## Use VLab4Mic from Napari and Fiji (experimental)
 
 The installer also registers two VLab4Mic tools for the [LabConstrictor tools bridge](https://github.com/CellMigrationLab/LabConstrictor-Tools), so that [Napari](https://github.com/CellMigrationLab/napari-labconstrictor) and [Fiji](https://github.com/CellMigrationLab/LabConstrictor-Fiji) show them as forms, and so that the command line can run them:
