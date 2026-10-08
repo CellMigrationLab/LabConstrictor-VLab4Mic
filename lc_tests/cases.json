@@ -531,5 +531,104 @@
       "code": "invalid_pixel_size",
       "message_contains": "greater than 0"
     }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "structure_file": "fixtures/mini_ring.cif",
+      "modality": "STED",
+      "number_of_particles": 2,
+      "random_seed": 3
+    },
+    "expect": {
+      "max_seconds": 180,
+      "progress_events_min": 3,
+      "results": {
+        "values": {
+          "modality": "STED",
+          "particles_requested": 2
+        }
+      }
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "modality": "Widefield",
+      "number_of_particles": 3,
+      "xy_orientation_angles": "0, 90",
+      "rotation_angles": "0, 180",
+      "global_orientation": "0, 0, 1",
+      "random_seed": 2,
+      "noise": false
+    },
+    "expect": {
+      "max_seconds": 180,
+      "progress_events_min": 3,
+      "results": {
+        "values": {
+          "modality": "Widefield",
+          "particles_requested": 3
+        }
+      }
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "xy_orientation_angles": "0, 90",
+      "random_orientations": false
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "angles_not_used",
+      "message_contains": "Random orientations"
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "rotation_angles": "0, 180",
+      "random_rotations": false
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "angles_not_used",
+      "message_contains": "Random rotations"
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "xy_orientation_angles": "north"
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "bad_list",
+      "message_contains": "XY angles"
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "global_orientation": "0, 1"
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "bad_list",
+      "message_contains": "exactly 3"
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "structure_file": "fixtures/mini_ring.cif",
+      "probe": "NPC_Nup96_Cterminal_direct"
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "probe_structure_mismatch",
+      "message_contains": "structure file"
+    }
   }
 ]
