@@ -15,6 +15,8 @@ from labconstrictor_tools import (
     Advanced,
     Axes,
     Description,
+    EnabledWhen,
+    File,
     Group,
     Image,
     ImageOut,
@@ -27,14 +29,35 @@ from labconstrictor_tools import (
     Scalars,
     ToolError,
     Unit,
+    Widget,
     check_cancel,
     progress,
     tool,
 )
 
-from ._labelling import check_labelling
+from ._labelling import check_labelling, check_structure_source, parse_numbers
 
 MAX_SIMULATION_GB = 2.0  # memory a simulation may need
+
+
+def _angle_options(global_orientation, xy, xz, yz, rotations, random_orientations, random_rotations):
+    """The orientation settings given as text (as in the notebook), as the lists VLab4Mic takes. Angle lists belong to the random
+    orientations / rotations: giving them while those are off is an error, not silently ignored."""
+    options = {}
+    if global_orientation:
+        options["sample_inital_orientation"] = parse_numbers(global_orientation, "Global orientation", count=3)
+    for key, text, name, enabled, needs in (
+        ("xy_orientations", xy, "XY angles", random_orientations, "Random orientations"),
+        ("xz_orientations", xz, "XZ angles", random_orientations, "Random orientations"),
+        ("yz_orientations", yz, "YZ angles", random_orientations, "Random orientations"),
+        ("rotation_angles", rotations, "Rotation angles", random_rotations, "Random rotations"),
+    ):
+        if not text:
+            continue
+        if not enabled:
+            raise ToolError("angles_not_used", "'%s' is only used with '%s': tick it, or leave the angles unset." % (name, needs))
+        options[key] = parse_numbers(text, name, integers=True)
+    return options
 
 
 @tool("Simulate imaging of a virtual sample")
@@ -46,8 +69,13 @@ def simulate_sample(
             "Structure to image (PDB ID): 1XI5 clathrin coat, 7R5K nuclear pore complex (constricted), 3J3Y HIV-1 capsid, 8GMO bacteriophage T4 capsid. The first run with a structure downloads it."
         ),
     ] = "1XI5",
+    structure_file: Annotated[
+        Optional[File],
+        Group("Sample"),
+        Description("A structure file (.cif or .pdb) to image instead of the PDB ID above; probes made for one particular structure cannot be used with it. Unset = use the PDB ID"),
+    ] = None,
     number_of_particles: Annotated[
-        int, Min(1), Max(20), Group("Sample"), Description("Copies of the structure placed in the field (fewer are placed when they would not fit)")
+        int, Min(1), Max(20), Widget("slider"), Group("Sample"), Description("Copies of the structure placed in the field (fewer are placed when they would not fit)")
     ] = 1,
     probe: Annotated[
         Literal[
@@ -76,7 +104,7 @@ def simulate_sample(
     ] = None,
     fluorophore: Annotated[Literal["AF647", "AF488"], Group("Labelling")] = "AF647",
     labelling_efficiency: Annotated[
-        float, Min(0), Max(1), Group("Labelling"), Description("Fraction of the binding sites that carry a probe")
+        float, Min(0), Max(1), Widget("slider"), Group("Labelling"), Description("Fraction of the binding sites that carry a probe")
     ] = 1.0,
     distance_from_epitope_angstrom: Annotated[
         Optional[float],
@@ -89,25 +117,27 @@ def simulate_sample(
         Description("Distance between the epitope and the probe; unset = the probe's own value"),
     ] = None,
     wobble_cone_degrees: Annotated[
-        Optional[float],
+        float,
         Min(0),
         Max(45),
+        Widget("slider"),
         Unit("deg"),
         Label("Wobble cone"), Group("Labelling"),
         Advanced(),
-        Description("Half-angle of the cone in which the probe wobbles; unset = no wobble"),
-    ] = None,
+        Description("Half-angle of the cone in which the probe wobbles; 0 = no wobble"),
+    ] = 0.0,
     degree_of_labelling: Annotated[
         Optional[int], Min(0), Max(1000), Group("Labelling"), Advanced(), Description("Fluorophores per probe (DOL); unset = the probe's own value")
     ] = None,
     structural_integrity: Annotated[
-        Optional[float],
+        float,
         Min(0),
         Max(1),
+        Widget("slider"),
         Group("Labelling"),
         Advanced(),
-        Description("Fraction of the complex that is intact; unset = intact. Uses the two cluster distances below"),
-    ] = None,
+        Description("Fraction of the complex that is intact; 1 = intact. Below 1 it uses the two cluster distances below"),
+    ] = 1.0,
     small_cluster_distance_angstrom: Annotated[
         float, Min(0), Unit("angstrom"), Label("Small cluster distance"), Group("Labelling"), Advanced(), Description("Distance that groups epitopes into multimers (with 'Structural integrity')")
     ] = 100.0,
@@ -131,6 +161,26 @@ def simulate_sample(
     axial_offset_nm: Annotated[Optional[float], Unit("nm"), Label("Axial offset"), Group("Sample"), Advanced(), Description("Height of the particles above the bottom of the sample; unset = standard")] = None,
     random_orientations: Annotated[bool, Group("Sample"), Advanced(), Description("Give each particle a random orientation")] = True,
     random_rotations: Annotated[bool, Group("Sample"), Advanced(), Description("Rotate each particle randomly in the plane")] = True,
+    global_orientation: Annotated[
+        Optional[str], Label("Global orientation (X, Y, Z)"), Group("Sample"), Advanced(),
+        Description("Three numbers separated by commas that orient all particles the same way, for example 0, 0, 1; unset = the structure's own orientation"),
+    ] = None,
+    xy_orientation_angles: Annotated[
+        Optional[str], Label("XY angles"), Group("Sample"), Advanced(), EnabledWhen("random_orientations"),
+        Description("Degrees, separated by commas, the random orientations are drawn from, for example 0, 90, 180; unset = any angle. Needs 'Random orientations'"),
+    ] = None,
+    xz_orientation_angles: Annotated[
+        Optional[str], Label("XZ angles"), Group("Sample"), Advanced(), EnabledWhen("random_orientations"),
+        Description("As the XY angles, in the XZ plane"),
+    ] = None,
+    yz_orientation_angles: Annotated[
+        Optional[str], Label("YZ angles"), Group("Sample"), Advanced(), EnabledWhen("random_orientations"),
+        Description("As the XY angles, in the YZ plane"),
+    ] = None,
+    rotation_angles: Annotated[
+        Optional[str], Label("Rotation angles"), Group("Sample"), Advanced(), EnabledWhen("random_rotations"),
+        Description("Degrees, separated by commas, the random in-plane rotations are drawn from, for example 0, 90, 180; unset = any angle. Needs 'Random rotations'"),
+    ] = None,
     expansion_factor: Annotated[float, Min(0.1), Max(100), Group("Sample"), Advanced(), Description("Expansion of the structure (expansion microscopy); 1 = none")] = 1.0,
     modality: Annotated[
         Literal["STED", "Widefield", "Confocal", "AiryScan", "SMLM"],
@@ -174,7 +224,9 @@ def simulate_sample(
     Scalars,
 ]:
     """Build a virtual sample of a molecular structure, label it with a probe and simulate how a microscope images it."""
-    check_labelling(structure, probe, target_sequence)
+    check_labelling(None if structure_file else structure, probe, target_sequence)
+    check_structure_source(structure, structure_file, probe)
+    angles = _angle_options(global_orientation, xy_orientation_angles, xz_orientation_angles, yz_orientation_angles, rotation_angles, random_orientations, random_rotations)
     progress(0.03, "loading VLab4Mic")
     import numpy as np
     from vlab4mic import experiments
@@ -184,14 +236,15 @@ def simulate_sample(
     sample = {}
     for key, value in (
         ("probe_distance_to_epitope", distance_from_epitope_angstrom),
-        ("probe_wobble_theta", wobble_cone_degrees),
         ("probe_DoL", degree_of_labelling),
         ("minimal_distance", minimal_distance_nm),
         ("axial_offset", axial_offset_nm),
     ):
         if value is not None:
             sample[key] = value
-    if structural_integrity is not None:
+    if wobble_cone_degrees > 0:
+        sample["probe_wobble_theta"] = float(wobble_cone_degrees)
+    if structural_integrity < 1:
         sample.update(
             structural_integrity=float(structural_integrity),
             structural_integrity_small_cluster=float(small_cluster_distance_angstrom),
@@ -199,7 +252,8 @@ def simulate_sample(
         )
     try:
         _, _, experiment = experiments.image_vsample(
-            structure=structure,
+            structure=str(structure_file) if structure_file else structure,
+            structure_is_path=bool(structure_file),
             probe_template=probe,
             probe_target_type="Sequence" if target_sequence else None,
             probe_target_value=target_sequence or None,
@@ -215,6 +269,7 @@ def simulate_sample(
             random_seed=random_seed,
             clear_experiment=True,
             run_simulation=False,
+            **angles,
             **sample,
         )
     except OSError as error:  # no internet, or the structure database is unreachable (requests' errors derive from OSError)

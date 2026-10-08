@@ -108,7 +108,8 @@ Good to know:
 - The pixel size is reported in the results (Napari and Fiji do not read it from the image): enter it as the pixel size of the layer or window when you compare images.
 - Each simulation replaces the previous `simulated` and `noiseless` images (one layer or window, not a pile while you tune the settings). To keep a result for comparison, rename its layer (Napari) or window (Fiji): a renamed one is never replaced.
 - SSIM is high for sparse images even when they do not match (an image full of background looks alike); read it together with the Pearson correlation.
-- Not in the tools (use the notebook): probes made from a protein, residue or primary probe, new fluorophores, image-based placement of particles, lists of orientations, several modalities or probes in one run, and multi-frame acquisitions (a single frame is returned).
+- The form uses the same controls as the notebook: sliders for the number of particles, the labelling efficiency, the wobble cone (0 = none) and the structural integrity (1 = intact), dropdowns for the structure, probe, fluorophore and modality. You can image your own structure file (`.cif` or `.pdb`, instead of the PDB ID) and set the orientation angles as comma-separated lists, as in the notebook.
+- Not in the tools (use the notebook): probes made from a protein, residue or primary probe, new fluorophores, image-based placement of particles, several modalities or probes in one run, parameter sweeps, and multi-frame acquisitions (a single frame is returned).
 - The notebooks are unchanged.
 
 Developers: `src/vlab4mic_lc_tools` holds the declarations, `lc_tests/` the tests (see `lc_tests/README.md`).

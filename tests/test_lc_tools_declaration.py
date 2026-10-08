@@ -118,3 +118,35 @@ def test_a_new_simulation_replaces_the_previous_images():
     outputs = {o["name"]: o for o in _tools()["simulate_sample"]["outputs"]}
     assert outputs["simulated"]["replace"] and outputs["noiseless"]["replace"]
     assert "replace" not in outputs["values"]
+
+
+def test_the_sliders_and_inputs_follow_the_notebook():
+    """The notebook shows these as sliders; the tool declares the same, with no 'unset' state a slider cannot hold."""
+    inputs = {p["name"]: p for p in _tools()["simulate_sample"]["inputs"]}
+    for name, low, high in (("number_of_particles", 1, 20), ("labelling_efficiency", 0, 1), ("wobble_cone_degrees", 0, 45), ("structural_integrity", 0, 1)):
+        assert inputs[name]["widget"] == "slider" and (inputs[name]["minimum"], inputs[name]["maximum"]) == (low, high), name
+        assert not inputs[name].get("nullable"), name
+    assert inputs["modality"]["type"] == "choice" and "widget" not in inputs["modality"]  # a dropdown in the notebook too
+    assert inputs["structure_file"]["type"] == "file" and inputs["structure_file"].get("nullable")
+    for name in ("xy_orientation_angles", "xz_orientation_angles", "yz_orientation_angles"):
+        assert inputs[name]["enabled_when"]["param"] == "random_orientations"
+    assert inputs["rotation_angles"]["enabled_when"]["param"] == "random_rotations"
+
+
+def test_angle_lists_are_parsed_or_refused_with_the_field_name():
+    from labconstrictor_tools import ToolError
+
+    from vlab4mic_lc_tools import _angle_options
+    from vlab4mic_lc_tools._labelling import parse_numbers
+
+    assert parse_numbers("0, 90 ,180", "XY angles", integers=True) == [0, 90, 180]
+    assert parse_numbers("0, 0.5, 1", "Global orientation", count=3) == [0.0, 0.5, 1.0]
+    assert _angle_options("0,0,1", "0, 90", None, None, "10", True, True) == {
+        "sample_inital_orientation": [0.0, 0.0, 1.0], "xy_orientations": [0, 90], "rotation_angles": [10],
+    }
+    for bad, kwargs in (("north", {}), ("0, 1", {"count": 3}), ("1.5", {"integers": True})):
+        with pytest.raises(ToolError, match="bad|must|needs"):
+            parse_numbers(bad, "Field", **kwargs)
+    with pytest.raises(ToolError, match="Random rotations"):
+        _angle_options(None, None, None, None, "0, 90", True, False)
+    assert _angle_options(None, None, None, None, None, False, False) == {}
