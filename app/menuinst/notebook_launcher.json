@@ -15,13 +15,13 @@
       ],
       "platforms": {
         "win": {
-          "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.ico"
+          "icon": "BASE_PATH_KEYWORD/VLab4Mic/vlab4mic_icon.ico"
         },
         "linux": {
-          "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.png"
+          "icon": "BASE_PATH_KEYWORD/VLab4Mic/vlab4mic_icon.png"
         },
         "osx": {
-          "icon": "BASE_PATH_KEYWORD/VLab4Mic/20260602_vlab4mic_fig2_NPC.icns"
+          "icon": "BASE_PATH_KEYWORD/VLab4Mic/vlab4mic_icon.icns"
         }
       }
     }
