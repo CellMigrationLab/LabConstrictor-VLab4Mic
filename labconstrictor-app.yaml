@@ -13,3 +13,11 @@ distribution:
 license: MIT
 categories: [microscopy simulation, experiment design]
 homepage: https://vlab4mic.henriqueslab.org/
+doi: 10.64898/2026.06.02.729521
+inputs:
+  - A molecular structure from a PDB ID, or your own structure file (.cif or .pdb)
+outputs:
+  - The simulated image and the noiseless image, plus the pixel size
+limitations:
+  - The Napari and Fiji tools return a single frame; multi-frame acquisitions and parameter sweeps are only in the notebook
+  - In the default 1000 nm field a widefield image at 100 nm per pixel has only 10 x 10 pixels; raise Sample size XY
