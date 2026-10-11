@@ -10,14 +10,27 @@ kind: simulation
 hosts: [notebook, napari, fiji]
 distribution:
   installer: true
+  colab:
+    - label: Build and image a virtual sample
+      url: https://colab.research.google.com/github/CellMigrationLab/LabConstrictor-VLab4Mic/blob/main/notebooks/VLab4Mic_main/VLab4Mic_main.ipynb
+    - label: Parameter sweeps
+      url: https://colab.research.google.com/github/CellMigrationLab/LabConstrictor-VLab4Mic/blob/main/notebooks/VLab4Mic_parameter_sweeps/VLab4Mic_parameter_sweeps.ipynb
 license: MIT
 categories: [microscopy simulation, experiment design]
+docs_url: https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic#readme
 homepage: https://vlab4mic.henriqueslab.org/
 doi: 10.64898/2026.06.02.729521
 inputs:
-  - A molecular structure from a PDB ID, or your own structure file (.cif or .pdb)
+  - "Molecular structures: choose a PDB ID or provide a .cif/.pdb file; configure probe, labelling and acquisition"
+  - "Image comparison: a reference and simulated 2D image with their pixel sizes (Napari/Fiji tools)"
 outputs:
-  - The simulated image and the noiseless image, plus the pixel size
+  - "Simulated and noiseless fluorescence microscopy images, with pixel size"
+  - "Image comparison scores (SSIM and Pearson correlation) when using the comparison tool"
 limitations:
-  - The Napari and Fiji tools return a single frame; multi-frame acquisitions and parameter sweeps are only in the notebook
+  - The napari and Fiji tools return one frame; multi-frame runs, parameter sweeps and advanced probe design require notebooks
   - In the default 1000 nm field a widefield image at 100 nm per pixel has only 10 x 10 pixels; raise Sample size XY
+quickstart:
+  - "Install and launch VLab4Mic, then open the Welcome dashboard in JupyterLab"
+  - "Open VLab4Mic_main to select a molecular structure, fluorescent probe and imaging modality"
+  - "Run the acquisition and inspect the simulated and noiseless images"
+  - "Use VLab4Mic_parameter_sweeps when you need to compare multiple parameter combinations"
