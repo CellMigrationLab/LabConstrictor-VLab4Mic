@@ -48,21 +48,21 @@ Installation takes around 6 to 8 minutes and is only needed once. After installi
 2. Run it and follow the prompts (choose *Install only for me*). It downloads and sets up Python and VLab4Mic, which takes 6 to 8 minutes; the window may look idle for a while.
 3. Windows: if it warns that the publisher is unknown, click **More info**, then **Run anyway**. macOS: if it refuses to open, go to **System Settings > Privacy & Security**, scroll to *Security* and click **Open Anyway**. Step-by-step pictures: [installation guide](.tools/docs/download_executable.md).
 
-You now have the VLab4Mic notebook app. To use it from Napari or Fiji, continue below; the app must stay installed, because the two programs only show its tools.
+You now have the VLab4Mic notebook app. To use it from napari or Fiji, continue below; the app must stay installed, because the two programs only show its tools.
 
-### 2. First simulation in Napari
-1. Install the two small Napari add-ons into the Python environment where Napari lives, then restart Napari ([details](https://github.com/CellMigrationLab/napari-labconstrictor#install)):
+### 2. First simulation in napari
+1. Install the two small napari add-ons into the Python environment where napari lives, then restart napari ([details](https://github.com/CellMigrationLab/napari-labconstrictor#install)):
    ```
    pip install https://github.com/CellMigrationLab/LabConstrictor-Tools/archive/refs/heads/main.zip
    pip install https://github.com/CellMigrationLab/napari-labconstrictor/archive/refs/heads/main.zip
    ```
-2. In Napari open **Plugins > LabConstrictor tools**. Pick **VLab4Mic**, then **Simulate imaging of a virtual sample**. The form is the same as the notebook's: structure, labelling, imaging. The advanced settings are behind *Show advanced settings*; the form scrolls.
+2. In napari open **Plugins > LabConstrictor tools**. Pick **VLab4Mic**, then **Simulate imaging of a virtual sample**. The form is the same as the notebook's: structure, labelling, imaging. The advanced settings are behind *Show advanced settings*; the form scrolls.
 
-   ![The VLab4Mic form in Napari](docs/img/howto_napari_form.png)
+   ![The VLab4Mic form in napari](docs/img/howto_napari_form.png)
 
 3. Choose a modality (here STED, 8 particles) and press **Run**. The first run downloads the structure and can take a minute; later runs of the same structure take 10 to 60 seconds. The line under the form tells you the result and the pixel size.
 
-   ![A simulated STED image in Napari](docs/img/howto_napari_result.png)
+   ![A simulated STED image in napari](docs/img/howto_napari_result.png)
 
 4. You get two layers, `VLab4Mic:simulated` and `VLab4Mic:noiseless`. Every new run **replaces** them. To keep a result, rename its layer: a renamed layer is never replaced.
 
@@ -80,15 +80,15 @@ You now have the VLab4Mic notebook app. To use it from Napari or Fiji, continue 
 | What you see | What to do |
 |---|---|
 | The installer window looks stuck | Wait: the installation takes 6 to 8 minutes. |
-| Napari or Fiji lists no VLab4Mic | The app is not registered: install it (or reinstall), then press **Rescan apps** in Napari or restart Fiji. |
-| The first run is very slow | It downloads the structure; the next run is faster. Keep **Keep the worker running** ticked in Napari. |
+| napari or Fiji lists no VLab4Mic | The app is not registered: install it (or reinstall), then press **Rescan apps** in napari or restart Fiji. |
+| The first run is very slow | It downloads the structure; the next run is faster. Keep **Keep the worker running** ticked in napari. |
 | The image is only 10 x 10 pixels | Widefield pixels are 100 nm and the default field is 1000 nm: raise *Sample size XY* under advanced settings. |
-| A run fails | Press **Details...** (Napari) or read the Log window (Fiji); the last lines say why. Press **Restart worker** and try again. |
+| A run fails | Press **Details...** (napari) or read the Log window (Fiji); the last lines say why. Press **Restart worker** and try again. |
 | Something else | [Open an issue](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/issues) with a screenshot and the text of **Details...**. |
 
-## Use VLab4Mic from Napari and Fiji (experimental)
+## Use VLab4Mic from napari and Fiji (experimental)
 
-The installer also registers two VLab4Mic tools for the [LabConstrictor tools bridge](https://github.com/CellMigrationLab/LabConstrictor-Tools), so that [Napari](https://github.com/CellMigrationLab/napari-labconstrictor) and [Fiji](https://github.com/CellMigrationLab/LabConstrictor-Fiji) show them as forms, and so that the command line can run them:
+The installer also registers two VLab4Mic tools for the [LabConstrictor tools bridge](https://github.com/CellMigrationLab/LabConstrictor-Tools), so that [napari](https://github.com/CellMigrationLab/napari-labconstrictor) and [Fiji](https://github.com/CellMigrationLab/LabConstrictor-Fiji) show them as forms, and so that the command line can run them:
 
 | Tool | What it does |
 |---|---|
@@ -105,8 +105,8 @@ Example from a terminal (use the Python of the installed app):
 Good to know:
 - The first run with a structure downloads it, and a run takes from about 10 seconds (small structure, STED) to over a minute (nuclear pore, SMLM). Stopping a run takes effect between its stages.
 - The image covers a square field (1000 nm by default, *Sample size XY* under advanced settings). A widefield image at 100 nm per pixel has only 10 x 10 pixels in the default field: use a larger field for the coarser modalities.
-- The pixel size is reported in the results (Napari and Fiji do not read it from the image): enter it as the pixel size of the layer or window when you compare images.
-- Each simulation replaces the previous `simulated` and `noiseless` images (one layer or window, not a pile while you tune the settings). To keep a result for comparison, rename its layer (Napari) or window (Fiji): a renamed one is never replaced.
+- The pixel size is reported in the results (napari and Fiji do not read it from the image): enter it as the pixel size of the layer or window when you compare images.
+- Each simulation replaces the previous `simulated` and `noiseless` images (one layer or window, not a pile while you tune the settings). To keep a result for comparison, rename its layer (napari) or window (Fiji): a renamed one is never replaced.
 - SSIM is high for sparse images even when they do not match (an image full of background looks alike); read it together with the Pearson correlation.
 - The form uses the same controls as the notebook: sliders for the number of particles, the labelling efficiency, the wobble cone (0 = none) and the structural integrity (1 = intact), dropdowns for the structure, probe, fluorophore and modality. You can image your own structure file (`.cif` or `.pdb`, instead of the PDB ID) and set the orientation angles as comma-separated lists, as in the notebook.
 - Not in the tools (use the notebook): probes made from a protein, residue or primary probe, new fluorophores, image-based placement of particles, several modalities or probes in one run, parameter sweeps, and multi-frame acquisitions (a single frame is returned).
