@@ -5,7 +5,7 @@ summary: A virtual lab to simulate fluorescence microscopy images, from molecula
 description: |-
   Build virtual samples from molecular structures, apply fluorescent labelling and simulate image acquisition across microscopy modalities, before stepping into the microscope room.
 
-  This is the desktop installer distribution of VLab4Mic. Two of its tools also run in Napari and Fiji.
+  This is the desktop installer distribution of VLab4Mic. Two of its tools also run in napari and Fiji.
 kind: simulation
 hosts: [notebook, napari, fiji]
 distribution:
@@ -23,7 +23,7 @@ homepage: https://vlab4mic.henriqueslab.org/
 doi: 10.64898/2026.06.02.729521
 inputs:
   - "Molecular structures: choose a PDB ID or provide a .cif/.pdb file; configure probe, labelling and acquisition"
-  - "Image comparison: a reference and simulated 2D image with their pixel sizes (Napari/Fiji tools)"
+  - "Image comparison: a reference and simulated 2D image with their pixel sizes (napari/Fiji tools)"
 outputs:
   - "Simulated and noiseless fluorescence microscopy images, with pixel size"
   - "Image comparison scores (SSIM and Pearson correlation) when using the comparison tool"
