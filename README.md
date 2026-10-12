@@ -51,10 +51,10 @@ Installation takes around 6 to 8 minutes and is only needed once. After installi
 You now have the VLab4Mic notebook app. To use it from napari or Fiji, continue below; the app must stay installed, because the two programs only show its tools.
 
 ### 2. First simulation in napari
-1. Install the two small napari add-ons into the Python environment where napari lives, then restart napari ([details](https://github.com/CellMigrationLab/napari-labconstrictor#install)):
+1. Install the two small napari add-ons into the Python environment where napari lives, then restart napari ([details](https://github.com/CellMigrationLab/LabConstrictor-napari#install)):
    ```
    pip install https://github.com/CellMigrationLab/LabConstrictor-Tools/archive/refs/heads/main.zip
-   pip install https://github.com/CellMigrationLab/napari-labconstrictor/archive/refs/heads/main.zip
+   pip install https://github.com/CellMigrationLab/LabConstrictor-napari/archive/refs/heads/main.zip
    ```
 2. In napari open **Plugins > LabConstrictor tools**. Pick **VLab4Mic**, then **Simulate imaging of a virtual sample**. The form is the same as the notebook's: structure, labelling, imaging. The advanced settings are behind *Show advanced settings*; the form scrolls.
 
@@ -88,7 +88,7 @@ You now have the VLab4Mic notebook app. To use it from napari or Fiji, continue 
 
 ## Use VLab4Mic from napari and Fiji (experimental)
 
-The installer also registers two VLab4Mic tools for the [LabConstrictor tools bridge](https://github.com/CellMigrationLab/LabConstrictor-Tools), so that [napari](https://github.com/CellMigrationLab/napari-labconstrictor) and [Fiji](https://github.com/CellMigrationLab/LabConstrictor-Fiji) show them as forms, and so that the command line can run them:
+The installer also registers two VLab4Mic tools for the [LabConstrictor tools bridge](https://github.com/CellMigrationLab/LabConstrictor-Tools), so that [napari](https://github.com/CellMigrationLab/LabConstrictor-napari) and [Fiji](https://github.com/CellMigrationLab/LabConstrictor-Fiji) show them as forms, and so that the command line can run them:
 
 | Tool | What it does |
 |---|---|
