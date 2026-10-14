@@ -2,7 +2,7 @@
 
 Declarations: `src/vlab4mic_lc_tools/`. The tools run in the app's own environment through the LabConstrictor tools worker.
 
-    python lc_tests/make_fixtures.py lc_tests/fixtures      # images for the comparison cases (numpy, scipy, tifffile)
+    python lc_tests/make_fixtures.py lc_tests/fixtures      # images for the comparison cases and mini_ring.cif for the structure-file cases (numpy, scipy, tifffile)
     labconstrictor-tools check --module vlab4mic_lc_tools --pythonpath src
     labconstrictor-tools test  --module vlab4mic_lc_tools --pythonpath src --cases lc_tests/cases.json
 
