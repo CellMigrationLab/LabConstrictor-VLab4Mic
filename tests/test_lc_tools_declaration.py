@@ -150,3 +150,46 @@ def test_angle_lists_are_parsed_or_refused_with_the_field_name():
     with pytest.raises(ToolError, match="Random rotations"):
         _angle_options(None, None, None, None, "0, 90", True, False)
     assert _angle_options(None, None, None, None, None, False, False) == {}
+
+
+def _tool_function(tool_id):
+    import importlib
+
+    from labconstrictor_tools.decorators import tools_in
+
+    importlib.import_module("vlab4mic_lc_tools")
+    return {t.id: t.fn for t in tools_in("vlab4mic_lc_tools")}[tool_id]
+
+
+@pytest.mark.parametrize("flat_value", [0, 7])
+@pytest.mark.parametrize("which", ["reference", "simulated"])
+def test_a_flat_image_is_refused_whichever_side_it_is_on(which, flat_value):
+    import numpy as np
+    from labconstrictor_tools import ToolError
+
+    spots = np.zeros((16, 16), np.uint16)
+    spots[4:8, 4:8] = 100
+    flat = np.full((16, 16), flat_value, np.uint16)
+    reference, simulated = (flat, spots) if which == "reference" else (spots, flat)
+    with pytest.raises(ToolError) as caught:
+        _tool_function("compare_images")(reference, simulated, 0.02, 0.02)
+    assert caught.value.code == "flat_image"
+    assert which in str(caught.value) and "same value everywhere" in str(caught.value)
+
+
+def test_a_structure_file_must_be_a_cif_or_pdb_file_that_exists(tmp_path):
+    from labconstrictor_tools import ToolError
+    from vlab4mic_lc_tools._labelling import check_structure_source
+
+    wrong_type = tmp_path / "tracks.csv"
+    wrong_type.write_text("a,b\n1,2\n")
+    with pytest.raises(ToolError) as caught:
+        check_structure_source("1XI5", wrong_type, "NHS_ester")
+    assert caught.value.code == "structure_file_type" and "tracks.csv" in str(caught.value)
+    with pytest.raises(ToolError) as caught:
+        check_structure_source("1XI5", tmp_path / "missing.cif", "NHS_ester")
+    assert caught.value.code == "structure_file_not_found"
+    for name in ("ring.cif", "RING.PDB"):
+        (tmp_path / name).write_text("data_x\n")
+        check_structure_source("1XI5", tmp_path / name, "NHS_ester")  # accepted: the file type is the only thing checked here, parsing is VLab4Mic's
+    check_structure_source("1XI5", None, "NHS_ester")  # no file: the PDB ID is used
