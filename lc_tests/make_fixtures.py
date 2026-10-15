@@ -34,6 +34,8 @@ imwrite(out / "same_field_40nm.tif", half)
 imwrite(out / "unrelated_20nm.tif", noise)
 imwrite(out / "flat_20nm.tif", np.full((size, size), 100, np.uint16))
 imwrite(out / "stack.tif", np.stack([reference, reference]))
+imwrite(out / "zero_20nm.tif", np.zeros((size, size), np.uint16))  # an all-zero image: nothing to compare
+(out / "not_a_structure.csv").write_text("x,y,z\n1,2,3\n")  # a file that is not a structure (refused by its type)
 
 
 def mini_ring_cif(n_atoms: int = 24, radius_a: float = 60.0) -> str:

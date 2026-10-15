@@ -630,5 +630,44 @@
       "code": "probe_structure_mismatch",
       "message_contains": "structure file"
     }
+  },
+  {
+    "tool": "compare_images",
+    "inputs": {
+      "reference": "fixtures/flat_20nm.tif",
+      "simulated": "fixtures/reference_20nm.tif",
+      "reference_pixel_size_um": 0.02,
+      "simulated_pixel_size_um": 0.02
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "flat_image",
+      "message_contains": "reference image has the same value everywhere"
+    }
+  },
+  {
+    "tool": "compare_images",
+    "inputs": {
+      "reference": "fixtures/zero_20nm.tif",
+      "simulated": "fixtures/reference_20nm.tif",
+      "reference_pixel_size_um": 0.02,
+      "simulated_pixel_size_um": 0.02
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "flat_image",
+      "message_contains": "reference image has the same value everywhere"
+    }
+  },
+  {
+    "tool": "simulate_sample",
+    "inputs": {
+      "structure_file": "fixtures/not_a_structure.csv"
+    },
+    "expect": {
+      "status": "FAILED",
+      "code": "structure_file_type",
+      "message_contains": ".cif or .pdb"
+    }
   }
 ]

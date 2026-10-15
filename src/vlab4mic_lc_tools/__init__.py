@@ -273,6 +273,8 @@ def simulate_sample(
             **sample,
         )
     except OSError as error:  # no internet, or the structure database is unreachable (requests' errors derive from OSError)
+        if structure_file:
+            raise ToolError("structure_file_unreadable", "Could not read the structure file %s (%s: %s)." % (structure_file, type(error).__name__, error)) from error
         raise ToolError(
             "structure_unavailable",
             "Could not get the structure %s (%s: %s). The first use of a structure downloads it from RCSB: check the internet connection and try again."
@@ -350,9 +352,7 @@ def compare_images(
     simulated_pixel_size_um: Annotated[float, Unit("um/px"), Min(0), PixelSizeOf("simulated"), Group("Images")],
 ) -> Scalars:
     """Measure how similar two images are: structural similarity (SSIM) and Pearson correlation, after matching the pixel sizes."""
-    progress(0.05, "loading VLab4Mic")
     import numpy as np
-    from vlab4mic.analysis import metrics
 
     for name, image in (("Reference", reference), ("Simulated", simulated)):
         if image.ndim != 2:
@@ -361,8 +361,12 @@ def compare_images(
             raise ToolError("bad_input", "%s contains NaN or infinite values" % name)
     if reference_pixel_size_um <= 0 or simulated_pixel_size_um <= 0:
         raise ToolError("invalid_pixel_size", "Both pixel sizes must be greater than 0 (they are in micrometres per pixel).")
-    if float(simulated.max()) == float(simulated.min()):
-        raise ToolError("flat_image", "The simulated image has the same value everywhere: similarity cannot be measured.")
+    for name, image in (("reference", reference), ("simulated", simulated)):  # a flat image (all zero, or one grey level) has nothing to compare: refused, never given a similarity
+        if float(image.max()) == float(image.min()):
+            raise ToolError("flat_image", "The %s image has the same value everywhere: similarity cannot be measured." % name)
+    progress(0.05, "loading VLab4Mic")
+    from vlab4mic.analysis import metrics
+
     check_cancel()
     progress(0.3, "matching the pixel sizes")
     ref = reference.astype(np.float64)

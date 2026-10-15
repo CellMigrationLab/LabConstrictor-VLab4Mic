@@ -3,6 +3,8 @@
 (The installer ships `setup.py` only when `src/` holds more than `__init__.py` files, and this keeps the declaration module short.)
 """
 
+from pathlib import Path
+
 from labconstrictor_tools import ToolError
 
 # Each probe template names the structures it can label (`known_targets` in its VLab4Mic configuration file):
@@ -33,8 +35,20 @@ def check_labelling(structure, probe, target_sequence):
         )
 
 
+STRUCTURE_FILE_TYPES = (".cif", ".pdb")  # VLab4Mic takes the format from the extension and only parses PDB and CIF; any other file fails inside the library
+
+
 def check_structure_source(structure, structure_file, probe):
-    """A structure file replaces the PDB ID, so a probe that was made for one particular structure cannot be used with it."""
+    """A structure file replaces the PDB ID, so a probe that was made for one particular structure cannot be used with it; it must be a readable .cif or .pdb file."""
+    if structure_file:
+        path = Path(str(structure_file))
+        if path.suffix.lower() not in STRUCTURE_FILE_TYPES:
+            raise ToolError(
+                "structure_file_type",
+                "The structure file '%s' is not a .cif or .pdb file (VLab4Mic can only read those two formats): choose a .cif or .pdb file, or leave the structure file unset to use the PDB ID." % path.name,
+            )
+        if not path.is_file():
+            raise ToolError("structure_file_not_found", "The structure file '%s' was not found: check the path." % path)
     if structure_file and probe in _PROBE_FOR_STRUCTURE:
         raise ToolError(
             "probe_structure_mismatch",
