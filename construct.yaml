@@ -1,16 +1,17 @@
 name: VLab4Mic
-version: 0.1.6
+version: 0.1.7
 environment_file: environment.yaml
 installer_type: all
 license_file: LICENSE
 welcome_image: app/logo/logo.png
 header_image: app/logo/logo.png
 icon_image: app/logo/vlab4mic_icon.png
-conclusion_text: Thank you! You have successfully installed VLab4Mic 0.1.6.
+conclusion_text: Thank you! You have successfully installed VLab4Mic 0.1.7.
 keep_pkgs: false
 register_python: false
 initialize_conda: false
 extra_files:
+- .tools/meta/src_change.yaml: VLab4Mic/src_change.yaml
 - app/bash_bat_scripts/pre_uninstall.sh: pre_uninstall.sh
 - app/bash_bat_scripts/uninstall.sh: uninstall.sh
 - app/logo/vlab4mic_icon.icns: VLab4Mic/vlab4mic_icon.icns
