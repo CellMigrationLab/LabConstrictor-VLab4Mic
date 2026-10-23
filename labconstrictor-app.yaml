@@ -12,13 +12,13 @@ distribution:
   installer: true
   colab:
     - label: Build and image a virtual sample
-      url: https://colab.research.google.com/github/CellMigrationLab/LabConstrictor-VLab4Mic/blob/main/notebooks/VLab4Mic_main/VLab4Mic_main.ipynb
+      url: https://colab.research.google.com/github/HenriquesLab/LabConstrictor-VLab4Mic/blob/main/notebooks/VLab4Mic_main/VLab4Mic_main.ipynb
     - label: Parameter sweeps
-      url: https://colab.research.google.com/github/CellMigrationLab/LabConstrictor-VLab4Mic/blob/main/notebooks/VLab4Mic_parameter_sweeps/VLab4Mic_parameter_sweeps.ipynb
+      url: https://colab.research.google.com/github/HenriquesLab/LabConstrictor-VLab4Mic/blob/main/notebooks/VLab4Mic_parameter_sweeps/VLab4Mic_parameter_sweeps.ipynb
 license: MIT
 icon: app/logo/vlab4mic_icon.png
 categories: [microscopy simulation, experiment design]
-docs_url: https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic#readme
+docs_url: https://github.com/HenriquesLab/LabConstrictor-VLab4Mic#readme
 homepage: https://vlab4mic.henriqueslab.org/
 doi: 10.64898/2026.06.02.729521
 inputs:

@@ -180,7 +180,7 @@ SET "ARP_KEY=HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\VLab4Mic"
 SET "UNINSTALL_EXE=%PREFIX%\Uninstall-VLab4Mic.exe"
 SET "DISPLAY_ICON=%PROJECT_ROOT%\logo.ico"
 SET "DISPLAY_VERSION=0.1.3"
-SET "PUBLISHER=CellMigrationLab"
+SET "PUBLISHER=HenriquesLab"
 echo Registering VLab4Mic in Windows Apps list >> "%LOG_FILE%"
 reg add "%ARP_KEY%" /v DisplayName /d "VLab4Mic" /f >> "%LOG_FILE%" 2>&1
 reg add "%ARP_KEY%" /v DisplayVersion /d "%DISPLAY_VERSION%" /f >> "%LOG_FILE%" 2>&1

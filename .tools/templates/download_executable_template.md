@@ -10,7 +10,7 @@ Choose your operating system and follow the instructions below to install VLab4M
 
 ## 1. Click the button to download VLab4Mic executable
 
-<a href="https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-Windows-x86_64.exe">
+<a href="https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-Windows-x86_64.exe">
     <img src="https://img.shields.io/badge/Download%20for%20Windows-Latest-blue?logo=windows&style=for-the-badge" alt="Download for Windows" width="250">
 </a>
 
@@ -48,7 +48,7 @@ Then, start using it following the instructions on the [Usage of Notebooks After
 
 ## 1. Click the button to download VLab4Mic executable
 
-<a href="https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-Linux-x86_64.sh">
+<a href="https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-Linux-x86_64.sh">
     <img src="https://img.shields.io/badge/Download%20for%20Linux-Latest-green?logo=linux&style=for-the-badge" alt="Download for Linux" width="250">
 </a>
 
@@ -108,13 +108,13 @@ First of all, you will need to choose whether you want to install it with **(A) 
 > 2. Select About This Mac.
 > 3. A window will pop up displaying your Mac’s information. Look into the `Chip` or `Processor` field. If `Intel` is mentioned, then download the Intel option. Otherwise, if `Mx` (e.g. M1 or M2) is mentioned, then download the ARM64 option. 
 
-<a href="https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-arm64.pkg">
+<a href="https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-arm64.pkg">
     <img src="https://img.shields.io/badge/Download%20for%20Mac%20(ARM64)-Latest-lightgrey?logo=apple&style=for-the-badge" alt="Download for Mac ARM64" width="250">
 </a>
 
 or 
     
-<a href="https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-x86_64.pkg">
+<a href="https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-x86_64.pkg">
     <img src="https://img.shields.io/badge/Download%20for%20Mac%20(Intel)-Latest-lightgrey?logo=apple&style=for-the-badge" alt="Download for Mac Intel" width="250">
 </a>
 
@@ -149,13 +149,13 @@ After installation, you can launch VLab4Mic from your Applications folder and st
 > 2. Select About This Mac.
 > 3. A window will pop up displaying your Mac’s information. Look into the `Chip` or `Processor` field. If `Intel` is mentioned, then download the Intel option. Otherwise, if `Mx` (e.g. M1 or M2) is mentioned, then download the ARM64 option. 
 
-<a href="https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-arm64.sh">
+<a href="https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-arm64.sh">
     <img src="https://img.shields.io/badge/Download%20for%20Mac%20(ARM64)-Latest-lightgrey?logo=apple&style=for-the-badge" alt="Download for Mac ARM64" width="250">
 </a>
 
 or 
     
-<a href="https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-x86_64.sh">
+<a href="https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases/download/VERSION_NUMBER/VLab4Mic-VERSION_NUMBER-MacOSX-x86_64.sh">
     <img src="https://img.shields.io/badge/Download%20for%20Mac%20(Intel)-Latest-lightgrey?logo=apple&style=for-the-badge" alt="Download for Mac Intel" width="250">
 </a>
 
