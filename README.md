@@ -84,7 +84,7 @@ You now have the VLab4Mic notebook app. To use it from napari or Fiji, continue 
 | The first run is very slow | It downloads the structure; the next run is faster. Keep **Keep the worker running** ticked in napari. |
 | The image is only 10 x 10 pixels | Widefield pixels are 100 nm and the default field is 1000 nm: raise *Sample size XY* under advanced settings. |
 | A run fails | Press **Details...** (napari) or read the Log window (Fiji); the last lines say why. Press **Restart worker** and try again. |
-| Something else | [Open an issue](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/issues) with a screenshot and the text of **Details...**. |
+| Something else | [Open an issue](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/issues) with a screenshot and the text of **Details...**. |
 
 ## Use VLab4Mic from napari and Fiji (experimental)
 
@@ -128,7 +128,7 @@ Prefer not to install anything, or want full scripting control? The [main VLab4M
 
 - Website and tutorials: https://vlab4mic.henriqueslab.org/
 - Main project repository: https://github.com/HenriquesLab/VLab4Mic
-- Questions and bug reports: [open an issue](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/issues)
+- Questions and bug reports: [open an issue](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/issues)
 
 ## Citation
 
