@@ -6,7 +6,7 @@
 
 **Download and install VLab4Mic on your computer. A friendly toolkit to simulate fluorescence microscopy images, no coding required.**
 
-[VLab4Mic website](https://vlab4mic.henriqueslab.org/) · [Main project repository](https://github.com/HenriquesLab/VLab4Mic) · [Releases](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases)
+[VLab4Mic website](https://vlab4mic.henriqueslab.org/) · [Main project repository](https://github.com/HenriquesLab/VLab4Mic) · [Releases](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases)
 
 </div>
 
@@ -27,7 +27,7 @@ With VLab4Mic you can:
 
 ## What this repository gives you
 
-This repository is the desktop-app distribution of VLab4Mic, built with [LabConstrictor](https://github.com/CellMigrationLab/LabConstrictor). It provides one-click installers for **Windows, macOS, and Linux**, so you can run VLab4Mic locally with no Python setup. The installers are published on the [Releases page](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases).
+This repository is the desktop-app distribution of VLab4Mic, built with [LabConstrictor](https://github.com/CellMigrationLab/LabConstrictor). It provides one-click installers for **Windows, macOS, and Linux**, so you can run VLab4Mic locally with no Python setup. The installers are published on the [Releases page](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases).
 
 ## Download and install
 
@@ -128,7 +128,7 @@ Prefer not to install anything, or want full scripting control? The [main VLab4M
 
 - Website and tutorials: https://vlab4mic.henriqueslab.org/
 - Main project repository: https://github.com/HenriquesLab/VLab4Mic
-- Questions and bug reports: [open an issue](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/issues)
+- Questions and bug reports: [open an issue](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/issues)
 
 ## Citation
 
