@@ -12,5 +12,5 @@ setup(
     description="VLab4Mic tools for Napari, Fiji and the command line (LabConstrictor tools bridge)",
     package_dir={"": "src"},
     packages=["vlab4mic_lc_tools"],
-    python_requires=">=3.10",
+    python_requires=">=3.12",
 )
