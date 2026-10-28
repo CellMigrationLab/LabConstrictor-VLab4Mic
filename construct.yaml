@@ -1,12 +1,12 @@
 name: VLab4Mic
-version: 0.1.7
+version: 0.1.8
 environment_file: environment.yaml
 installer_type: all
 license_file: LICENSE
 welcome_image: app/logo/logo.png
 header_image: app/logo/logo.png
 icon_image: app/logo/vlab4mic_icon.png
-conclusion_text: Thank you! You have successfully installed VLab4Mic 0.1.7.
+conclusion_text: Thank you! You have successfully installed VLab4Mic 0.1.8.
 keep_pkgs: false
 register_python: false
 initialize_conda: false
