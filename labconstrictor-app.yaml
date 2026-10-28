@@ -25,7 +25,7 @@ inputs:
   - "Molecular structures: choose a PDB ID or provide a .cif/.pdb file; configure probe, labelling and acquisition"
   - "Image comparison: a reference and simulated 2D image with their pixel sizes (napari/Fiji tools)"
 outputs:
-  - "Simulated and noiseless fluorescence microscopy images, with pixel size"
+  - "Simulated and noiseless fluorescence microscopy images, with their pixel size reported"
   - "Image comparison scores (SSIM and Pearson correlation) when using the comparison tool"
 limitations:
   - The napari and Fiji tools return one frame; multi-frame runs, parameter sweeps and advanced probe design require notebooks
