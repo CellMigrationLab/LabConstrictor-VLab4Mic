@@ -15,7 +15,14 @@
       ],
       "platforms": {
         "win": {
-          "icon": "BASE_PATH_KEYWORD/VLab4Mic/vlab4mic_icon.ico"
+          "icon": "BASE_PATH_KEYWORD/VLab4Mic/vlab4mic_icon.ico",
+          "command": [
+            "{{ PYTHON }}",
+            "{{ PREFIX }}/VLab4Mic/launch_jupyter.py",
+            "{{ PREFIX }}/VLab4Mic/notebooks/Welcome.ipynb",
+            "&",
+            "exit"
+          ]
         },
         "linux": {
           "icon": "BASE_PATH_KEYWORD/VLab4Mic/vlab4mic_icon.png"
