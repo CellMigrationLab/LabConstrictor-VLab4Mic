@@ -8,6 +8,11 @@ description: |-
   This is the desktop installer distribution of VLab4Mic. Two of its tools also run in napari and Fiji.
 kind: simulation
 hosts: [notebook, napari, fiji]
+host_requirements:   # the oldest LabConstrictor plugins this app needs (LabConstrictor-Tools #155)
+  napari:
+    min_version: 0.1.0-alpha.5
+  fiji:
+    min_version: 0.1.0-alpha.7
 distribution:
   installer: true
   colab:
