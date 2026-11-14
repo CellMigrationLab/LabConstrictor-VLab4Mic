@@ -8,7 +8,7 @@ from setuptools import setup
 
 setup(
     name="vlab4mic-lc-tools",
-    version="0.1.0",
+    version="0.1.8",
     description="VLab4Mic tools for Napari, Fiji and the command line (LabConstrictor tools bridge)",
     package_dir={"": "src"},
     packages=["vlab4mic_lc_tools"],
