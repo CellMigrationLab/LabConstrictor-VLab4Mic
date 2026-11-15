@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="src/logo/logo.png" width="420" alt="VLab4Mic logo"/>
+<img src="app/logo/logo.png" width="420" alt="VLab4Mic logo"/>
 
 # VLab4Mic Desktop App
 
