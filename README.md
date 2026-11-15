@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="src/logo/logo.png" width="420" alt="VLab4Mic logo"/>
+<img src="app/logo/logo.png" width="420" alt="VLab4Mic logo"/>
 
 # VLab4Mic Desktop App
 
 **Download and install VLab4Mic on your computer. A friendly toolkit to simulate fluorescence microscopy images, no coding required.**
 
-[VLab4Mic website](https://vlab4mic.henriqueslab.org/) · [Main project repository](https://github.com/HenriquesLab/VLab4Mic) · [Releases](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases)
+[VLab4Mic website](https://vlab4mic.henriqueslab.org/) · [Main project repository](https://github.com/HenriquesLab/VLab4Mic) · [Releases](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases)
 
 </div>
 
@@ -27,7 +27,7 @@ With VLab4Mic you can:
 
 ## What this repository gives you
 
-This repository is the desktop-app distribution of VLab4Mic, built with [LabConstrictor](https://github.com/CellMigrationLab/LabConstrictor). It provides one-click installers for **Windows, macOS, and Linux**, so you can run VLab4Mic locally with no Python setup. The installers are published on the [Releases page](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases).
+This repository is the desktop-app distribution of VLab4Mic, built with [LabConstrictor](https://github.com/CellMigrationLab/LabConstrictor). It provides one-click installers for **Windows, macOS, and Linux**, so you can run VLab4Mic locally with no Python setup. The installers are published on the [Releases page](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases).
 
 ## Download and install
 
@@ -43,24 +43,24 @@ Installation takes around 6 to 8 minutes and is only needed once. After installi
 
 ## How-to: install and run your first simulation
 
-### 1. Install the app (about 10 minutes, once)
-1. Open the [Releases page](https://github.com/HenriquesLab/LabConstrictor-VLab4Mic/releases) and download the installer for your system from the newest release: the `.exe` for Windows, the `.pkg` for a Mac with an Apple chip (M1 or newer; Intel Macs are not supported), the `.sh` for Linux.
-2. Run it and follow the prompts (choose *Install only for me*). It downloads and sets up Python and VLab4Mic, which takes 6 to 8 minutes; the window may look idle for a while.
+### 1. Install the app (6 to 8 minutes, once)
+1. Open the [Releases page](https://github.com/CellMigrationLab/LabConstrictor-VLab4Mic/releases) and download the installer for your system from the newest release: the `.exe` for Windows, the `.pkg` for a Mac (`arm64` for an Apple chip, M1 or newer; `x86_64` for an Intel Mac), the `.sh` for Linux.
+2. Run it and follow the prompts (choose *Install only for me*). It downloads and sets up Python and VLab4Mic; the window may look idle for a while.
 3. Windows: if it warns that the publisher is unknown, click **More info**, then **Run anyway**. macOS: if it refuses to open, go to **System Settings > Privacy & Security**, scroll to *Security* and click **Open Anyway**. Step-by-step pictures: [installation guide](.tools/docs/download_executable.md).
 
-You now have the VLab4Mic notebook app. To use it from napari or Fiji, continue below; the app must stay installed, because the two programs only show its tools. VLab4Mic's tools are listed in **napari and Fiji**, not in QuPath. How to install the napari and Fiji bridge and how to test it: [LabConstrictor-Tools docs](https://github.com/CellMigrationLab/LabConstrictor-Tools/tree/main/docs).
+You now have the VLab4Mic notebook app. To use it from napari or Fiji, continue below; the app must stay installed, because the two programs only show its tools. How to install the napari and Fiji bridge and how to test it: [LabConstrictor-Tools docs](https://github.com/CellMigrationLab/LabConstrictor-Tools/tree/main/docs).
 
 ### 2. First simulation in napari
 1. Install the two small napari add-ons into the Python environment where napari lives, then restart napari ([details](https://github.com/CellMigrationLab/LabConstrictor-napari#install)):
    ```
-   pip install https://github.com/CellMigrationLab/LabConstrictor-Tools/archive/refs/tags/v0.3.0-alpha.1.zip
+   pip install https://github.com/CellMigrationLab/LabConstrictor-Tools/archive/refs/tags/v0.3.0-alpha.2.zip
    pip install https://github.com/CellMigrationLab/LabConstrictor-napari/archive/refs/heads/main.zip
    ```
 2. In napari open **Plugins > LabConstrictor tools**. Pick **VLab4Mic**, then **Simulate imaging of a virtual sample**. The form is the same as the notebook's: structure, labelling, imaging. The advanced settings are behind *Show advanced settings*; the form scrolls.
 
    ![The VLab4Mic form in napari](docs/img/howto_napari_form.png)
 
-3. Choose a modality (here STED, 8 particles) and press **Run**. The first run downloads the structure and can take a minute; later runs of the same structure take 10 to 60 seconds. The line under the form tells you the result and the pixel size.
+3. Choose a modality (here STED, 8 particles) and press **Run**. The first run downloads the structure and can take a minute; later runs take from about 10 seconds (small structure, STED) to over a minute (nuclear pore, SMLM). Stopping a run takes effect between its stages. The line under the form tells you the result and the pixel size.
 
    ![A simulated STED image in napari](docs/img/howto_napari_result.png)
 
@@ -94,8 +94,8 @@ The installer also registers two VLab4Mic tools for the [LabConstrictor tools br
 
 | Tool | What it does |
 |---|---|
-| **Simulate imaging of a virtual sample** | Builds a virtual sample of a structure (clathrin, nuclear pore, HIV capsid, T4 capsid), labels it with a probe and images it with one of the five modalities, with the settings of the notebook (advanced ones are folded away). Returns the simulated and the noiseless image, plus the pixel size. |
-| **Compare an image with a reference** | Measures the structural similarity (SSIM) and the Pearson correlation of two images after matching their pixel sizes. |
+| **Simulate imaging of a virtual sample** | Builds a virtual sample of a structure (clathrin, nuclear pore, HIV capsid, T4 capsid, or your own `.cif`/`.pdb` file), labels it with a probe and images it with one of the five modalities. The form has the notebook's controls: sliders for the number of particles, the labelling efficiency, the wobble cone (0 = none) and the structural integrity (1 = intact), dropdowns for the structure, probe, fluorophore and modality, and orientation angles as comma-separated lists; advanced ones are folded away. Returns the simulated and the noiseless image (one frame), plus the pixel size. |
+| **Compare an image with a reference** | Measures the structural similarity (SSIM) and the Pearson correlation of two images after matching their pixel sizes. napari and Fiji do not read the pixel size from the image: enter the one the simulation reported. SSIM is high for sparse images even when they do not match, so read it together with the Pearson correlation. |
 
 Example from a terminal (use the Python of the installed app):
 
@@ -104,15 +104,7 @@ Example from a terminal (use the Python of the installed app):
 <install folder>/bin/python -m labconstrictor_tools run VLab4Mic simulate_sample structure=7R5K probe=NPC_Nup96_Cterminal_direct modality=Widefield sample_size_xy_nm=3000
 ```
 
-Good to know:
-- The first run with a structure downloads it, and a run takes from about 10 seconds (small structure, STED) to over a minute (nuclear pore, SMLM). Stopping a run takes effect between its stages.
-- The image covers a square field (1000 nm by default, *Sample size XY* under advanced settings). A widefield image at 100 nm per pixel has only 10 x 10 pixels in the default field: use a larger field for the coarser modalities.
-- The pixel size is reported in the results (napari and Fiji do not read it from the image): enter it as the pixel size of the layer or window when you compare images.
-- Each simulation replaces the previous `simulated` and `noiseless` images (one layer or window, not a pile while you tune the settings). To keep a result for comparison, rename its layer (napari) or window (Fiji): a renamed one is never replaced.
-- SSIM is high for sparse images even when they do not match (an image full of background looks alike); read it together with the Pearson correlation.
-- The form uses the same controls as the notebook: sliders for the number of particles, the labelling efficiency, the wobble cone (0 = none) and the structural integrity (1 = intact), dropdowns for the structure, probe, fluorophore and modality. You can image your own structure file (`.cif` or `.pdb`, instead of the PDB ID) and set the orientation angles as comma-separated lists, as in the notebook.
-- Not in the tools (use the notebook): probes made from a protein, residue or primary probe, new fluorophores, image-based placement of particles, several modalities or probes in one run, parameter sweeps, and multi-frame acquisitions (a single frame is returned).
-- The notebooks are unchanged.
+Not in the tools (use the notebook): probes made from a protein, residue or primary probe, new fluorophores, image-based placement of particles, several modalities or probes in one run, parameter sweeps, and multi-frame acquisitions.
 
 Developers: `src/vlab4mic_lc_tools` holds the declarations, `lc_tests/` the tests (see `lc_tests/README.md`).
 
